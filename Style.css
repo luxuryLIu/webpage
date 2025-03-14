@@ -1,0 +1,573 @@
+/* 全局样式 */
+html, body {
+  font-family: 'Lato', Arial, sans-serif;
+}
+
+/* 标题字体 */
+.cover-text {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
+}
+
+/* Leaflet 版权信息 */
+.leaflet-control-attribution {
+  font-size: 10px;
+}
+/* 选择框整体样式 */
+.leaflet-control-layers {
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 5px;
+  padding: 8px;
+  font-size: 14px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* 选项文本颜色 */
+.leaflet-control-layers label {
+  color: #333;
+  font-weight: bold;
+  margin: 3px 0;
+}
+
+/* 选项 hover 效果 */
+.leaflet-control-layers label:hover {
+  color: #ff6600;
+  cursor: pointer;
+}
+
+
+
+/* 地图容器 */
+#map {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+}
+
+/* 头部和尾部（如果需要） */
+header, footer {
+  position: absolute;
+  width: 100%;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 10px;
+}
+header { top: 0; }
+footer { bottom: 0; }
+
+/* 地图封面：背景图片叠加渐变遮罩 */
+#mapCover {
+  position: absolute;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('bg.jpg') no-repeat center center;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  text-align: center;
+}
+
+/* 封面遮罩 */
+#mapCover .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+/* 封面内容 */
+#mapCover .cover-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 800px;
+}
+
+/* 封面标题 */
+.cover-text {
+  color: #fff;
+  font-size: 48px;
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+  margin-bottom: 30px;
+  opacity: 0;
+  animation: fadeInUp 2s ease-out forwards;
+}
+
+/* 标题入场动画 */
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* 封面描述 */
+.cover-desc {
+  color: #fff;
+  font-size: 20px;
+  text-align: center;
+  max-width: 80%;
+  margin-bottom: 30px;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+  opacity: 0;
+  animation: fadeInUpDelayed 2s ease-out forwards 1s;
+}
+
+/* 描述动画 */
+@keyframes fadeInUpDelayed {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 进入地图按钮 */
+#enterMapBtn {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  padding: 12px 30px;
+  color: #fff;
+  background: linear-gradient(45deg, #ff9ff3, #f368e0);
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+}
+#enterMapBtn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.5);
+}
+#enterMapBtn:active {
+  transform: translateY(-1px);
+}
+#enterMapBtn i {
+  margin-right: 8px;
+  font-size: 1.2em;
+  vertical-align: middle;
+}
+
+/* 淡出动画 */
+.fade-out {
+  animation: fadeOut 1s forwards;
+}
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  100% { opacity: 0; visibility: hidden; }
+}
+
+/* 左下角数据面板：娱乐场所介绍 */
+#venuePanel {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  width: 300px;
+  height: 700px;  /* 固定高度 */
+  overflow-y: auto;
+  background: rgba(255, 255, 255, 0.85);
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  z-index: 1200;
+  transition: transform 0.5s ease, background-color 0.3s ease;
+}
+
+/* 面板折叠效果 */
+#venuePanel.collapsed {
+  transform: translateX(-100%);
+}
+
+/* 面板头部 */
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.panel-header h3 {
+  margin: 0;
+  font-size: 20px;
+  color: #333;
+}
+#togglePanelBtn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #333;
+}
+#togglePanelBtn:hover {
+  color: #ff5722;
+}
+
+/* 折叠时隐藏内容 */
+#panelContent {
+  transition: max-height 0.5s ease, opacity 0.5s ease;
+  max-height: 450px; /* 默认高度，可根据需要调整 */
+  opacity: 1;
+  overflow: hidden;
+}
+
+/* 折叠状态：将内容容器高度设为0 */
+#venuePanel.collapsed #panelContent {
+  max-height: 0;
+  opacity: 0;
+}
+
+/* 娱乐场所项 */
+.venue {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.venue:hover {
+  border-color: #ff5722;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+.venue-icon {
+  font-size: 40px;
+  margin-right: 15px;
+  color: #ff5722;
+}
+
+/* 场所描述文字：默认折叠，悬停展开 */
+/* .venue-info p {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease-out, opacity 0.5s ease-out;
+} */
+.venue-info p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1;
+  /* Ensure the paragraph can expand fully */
+  overflow: visible;
+  white-space: normal;
+}
+
+.venue:hover .venue-info p {
+  max-height: none; /* or a higher value, e.g., 300px */
+  opacity: 1;
+}
+
+
+/* 全局样式 */
+html, body {
+  font-family: 'Lato', Arial, sans-serif;
+}
+
+/* 标题字体 */
+.cover-text {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
+}
+
+/* Leaflet 版权信息 */
+.leaflet-control-attribution {
+  font-size: 10px;
+}
+
+/* 地图容器 */
+#map {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+}
+
+/* 头部和尾部（如果需要） */
+header, footer {
+  position: absolute;
+  width: 100%;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 10px;
+}
+header { top: 0; }
+footer { bottom: 0; }
+
+/* 地图封面：背景图片叠加渐变遮罩 */
+#mapCover {
+  position: absolute;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('bg.jpg') no-repeat center center;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  text-align: center;
+}
+
+/* 封面遮罩 */
+#mapCover .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+/* 封面内容 */
+#mapCover .cover-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 800px;
+}
+
+/* 封面标题 */
+.cover-text {
+  color: #fff;
+  font-size: 48px;
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+  margin-bottom: 30px;
+  opacity: 0;
+  animation: fadeInUp 2s ease-out forwards;
+}
+
+/* 标题入场动画 */
+@keyframes fadeInUp {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* 封面描述 */
+.cover-desc {
+  color: #fff;
+  font-size: 20px;
+  text-align: center;
+  max-width: 80%;
+  margin-bottom: 30px;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+  opacity: 0;
+  animation: fadeInUpDelayed 2s ease-out forwards 1s;
+}
+
+/* 描述动画 */
+@keyframes fadeInUpDelayed {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 进入地图按钮 */
+#enterMapBtn {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 20px;
+  padding: 12px 30px;
+  color: #fff;
+  background: linear-gradient(45deg, #ff9ff3, #f368e0);
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+}
+#enterMapBtn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.5);
+}
+#enterMapBtn:active {
+  transform: translateY(-1px);
+}
+#enterMapBtn i {
+  margin-right: 8px;
+  font-size: 1.2em;
+  vertical-align: middle;
+}
+
+/* 淡出动画 */
+.fade-out {
+  animation: fadeOut 1s forwards;
+}
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  100% { opacity: 0; visibility: hidden; }
+}
+
+/* 左下角数据面板：娱乐场所介绍 */
+/* Left-bottom data panel: Cultural venues introduction */
+#venuePanel {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  width: 300px;
+  height: 600px;  /* Fixed height */
+  background: rgba(255, 255, 255, 0.85);
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  z-index: 1200;
+  /* Remove overflow hidden to allow inner scrolling */
+  transition: transform 0.5s ease, background-color 0.3s ease;
+}
+
+/* 当面板被折叠时，通过折叠内容 */
+#venuePanel.collapsed #panelContent {
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.5s ease, opacity 0.5s ease;
+}
+
+/* 面板头部，始终显示 */
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.panel-header h3 {
+  margin: 0;
+  font-size: 20px;
+  color: #333;
+}
+#togglePanelBtn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #333;
+  transition: color 0.3s;
+}
+#togglePanelBtn:hover {
+  color: #ff5722;
+}
+
+
+/* Panel content: enable vertical scrolling */
+#panelContent {
+  max-height: 100%;
+  overflow-y: auto;
+  transition: max-height 0.5s ease, opacity 0.5s ease;
+}
+/* 娱乐场所项 */
+.venue {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.venue:hover {
+  border-color: #ff5722;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+.venue-icon {
+  font-size: 24px;
+  margin-right: 15px;
+  color: #ff5722;
+}
+
+/* 场所描述文字：默认折叠，悬停展开 */
+.venue-info p {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease-out, opacity 0.5s ease-out;
+}
+.venue:hover .venue-info p {
+  max-height: 200px;
+  opacity: 1;
+}
+
+
+/* 右下角数据面板：条形图 */
+#chartPanel {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;  /* 确保使用 right 而非 left */
+  width: 300px;
+  height: 400px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  z-index: 1200;
+  transition: background-color 0.3s ease;
+  overflow-y: auto;
+}
+#chartPanel:hover {
+  background-color: #e0e0e0;
+}
+#chartPanel h3 {
+  margin-top: 0;
+  text-align: center;
+  color: #333;
+}
+
+/* 其他可选的文化场所类型列表样式 */
+#culturalTypes {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 10px;
+}
+.cultural-type {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  position: relative;
+  cursor: pointer;
+}
+.cultural-type .icon {
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+  margin-right: 8px;
+  background-size: cover;
+}
+
+/* 其他可选的文化场所类型列表样式 */
+#culturalTypes {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 10px;
+}
+.cultural-type {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+  position: relative;
+  cursor: pointer;
+}
+.cultural-type .icon {
+  width: 24px;
+  height: 24px;
+  display: inline-block;
+  margin-right: 8px;
+  background-size: cover;
+}
+
+#togglePanelBtn {
+  background-color: #3498db;  /* 初始背景色 */
+  color: #fff;
+  border: none;
+  border-radius: 50%;         /* 圆形 */
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  transition: background-color 0.3s ease;
+}
+
+#togglePanelBtn:hover {
+  background-color: #2980b9;  /* 悬停背景色 */
+}

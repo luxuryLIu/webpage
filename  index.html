@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>Interactive map of cultural buildings in London</title>
+  <!-- Include Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <!-- Include Font Awesome (without integrity) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- Include MarkerCluster CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
+  <!-- Include custom styles -->
+  <link rel="stylesheet" href="Style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Lato&display=swap" rel="stylesheet">
+</head>
+<body>
+  <h1>Interactive map of cultural buildings in London</h1>
+  <div id="map"></div>
+  
+  <!-- Map cover -->
+  <div id="mapCover">
+    <div class="overlay"></div>
+    <div class="cover-content">
+      <div class="cover-text">
+        Welcome to London's Cultural Explorers
+      </div>
+      <p class="cover-desc">
+        Discover your area of interest with ease. This page presents the distribution of various cultural, arts, and entertainment centers in London, along with links to their official websites.
+      </p>
+      <button id="enterMapBtn">
+        <i class="fas fa-arrow-right" aria-hidden="true"></i>
+        Enter Map
+      </button>      
+    </div>
+  </div>
+
+  <!-- Bottom-left data panel: Cultural venues introduction -->
+  <div id="venuePanel" style="display: none;">
+    <div class="panel-header">
+      <h3>Introduction to cultural architecture</h3>
+      <button id="togglePanelBtn">☰</button>
+    </div>
+    <div id="panelContent">
+      <div id="venueList">
+        <div class="venue">
+          <i class="fas fa-paint-brush venue-icon"></i>
+          <div class="venue-info">
+            <h3>Artist workspaces</h3>
+            <p>Sites with buildings which provide workspace either solely for artists or a mixture of artists and other creative industries tenants. Activity in this context is not driven by commercial gain (although they are by no means prohibited from having this). The approach to the production of art is driven by the artist, not the client.</p>
+          </div>
+        </div>
+        <div class="venue">
+          <i class="fas fa-university venue-icon"></i>
+          <div class="venue-info">
+            <h3>Art centers</h3>
+            <p>Buildings which are used for multi-use/multi-artform purposes. Providing three or more of the following facilities: performing arts space, visual art gallery space, museum facilities, cinema space, education space and/or rehearsal studios, archives and/or library facilities. The space must offer some professional programming of multiple artforms (performing or visual arts) alongside community programming.</p>
+          </div>
+        </div>
+        <div class="venue">
+          <i class="fas fa-film venue-icon"></i>
+          <div class="venue-info">
+            <h3>Cinemas</h3>
+            <p>Buildings which have a fixed screen for cinema projection where tickets are available for the public to purchase.</p>
+          </div>
+        </div>
+        <div class="venue">
+          <i class="fas fa-running venue-icon"></i>
+          <div class="venue-info">
+            <h3>Dance performances venues</h3>
+            <p>Buildings which are used for dance performances. These are only included if they can be attended or booked by the public.</p>
+          </div>
+        </div>
+        <div class="venue">
+          <i class="fas fa-tshirt venue-icon"></i>
+          <div class="venue-info">
+            <h3>Fashion and design</h3>
+            <p>Buildings are used for fashion and textiles manufacturing businesses. They provide specialised design, artistic creation and other manufacturing. These businesses are mostly involved in the design of fashion apparel and accessories, although some more directly engage with manufacturing processes for the fashion industry.</p>
+          </div>
+        </div>
+        <div class="venue">
+          <i class="fas fa-gem venue-icon"></i>
+          <div class="venue-info">
+            <h3>Jewellery design</h3>
+            <p>Buildings which provide space for jewellery design, making and manufacturing services.</p>
+          </div>
+        </div>
+        <div class="venue">
+          <i class="fas fa-rainbow venue-icon"></i>
+          <div class="venue-info">
+            <h3>LGBT nightclub </h3>
+            <p>Buildings used as cultural venues which operate at night time for use by the LBGTQ+ community. This also includes venues that regularly programme LGBTQ+ nights.</p>
+          </div>
+        </div>
+        <div class="venue">
+          <i class="fas fa-book venue-icon"></i>
+          <div class="venue-info">
+            <h3>Library</h3>
+            <p>Buildings used for public and community libraries. This excludes libraries affiliated with higher education institutions.</p>
+          </div>
+        </div>
+        <div class="venue">
+          <i class="fas fa-landmark venue-icon"></i>
+          <div class="venue-info">
+            <h3>Museum and public galleries</h3>
+            <p>Buildings used for museum collections. This includes art museums, history and other specialised museums. This excludes open-air museums, activities of commercial art galleries, restoration of works of art and museum collection objects, activities of libraries and archives. Art museums differ from commercial art galleries in that they usually have permanent collections or endowments and do not try to sell the artworks on a regular basis.</p>
+          </div>
+        </div>
+        <div class="venue">
+          <i class="fas fa-headphones venue-icon"></i>
+          <div class="venue-info">
+            <h3>Music </h3>
+            <p>Music venues All includes: Arena and stadium, concert halls, GMVs, Music bar and pub (revised definition), Music restaurant and cafes, Arts and multi-purpose centres, Occasional Music Venues and LGBTQ+ Music Spaces. Changes to subcategories mean the 2018 and 2022 datasets aren’t directly comparable.</p>
+          </div>
+        </div>
+        <div class="venue">
+          <i class="fas fa-moon venue-icon"></i>
+          <div class="venue-info">
+            <h3>Music nightclub</h3>
+            <p>A late-night venue, closing post-midnight, often with DJs or live music, with music/dancing and entertainment a primary focus for the business and consumers who go there.</p>
+          </div>
+        </div>
+        <div class="venue">
+          <i class="fas fa-theater-masks venue-icon"></i>
+          <div class="venue-info">
+            <h3>Theater</h3>
+            <p>Buildings with 30 public performances per year.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Right-bottom data panel: Bar chart -->
+<div id="chartPanel" style="display: none;">
+  <h3>Data List</h3>
+  <canvas id="barChart" width="280" height="150"></canvas>
+</div>
+  
+<!-- Include Leaflet JS -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<!-- Include MarkerCluster JS -->
+<script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+<!-- Include Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Include custom script -->
+<script src="main.js"></script>
+</body>
+</html>
+x
+
+
+
